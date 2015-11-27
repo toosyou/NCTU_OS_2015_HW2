@@ -5,6 +5,8 @@
 
 #include <pthread.h>
 
+#define NUMBER_THREAD 16
+
 using namespace std;
 
 pthread_mutex_t mutex_counter;
@@ -33,8 +35,10 @@ public:
 
 Counter x;
 
+int number2thread = 100000000;
+
 void* thread_runner(void*){
-    for(int i=0;i<100000000;++i){
+    for(int i=0;i<number2thread;++i){
         pthread_mutex_lock(&mutex_counter);
         x.increment();
         pthread_mutex_unlock(&mutex_counter);
@@ -44,11 +48,11 @@ void* thread_runner(void*){
 int main(void){
     clock_t start_clock = clock();
 
-    pthread_t tid[3];
-    for(int i=0;i<3;++i){
+    pthread_t tid[NUMBER_THREAD];
+    for(int i=0;i<NUMBER_THREAD;++i){
         pthread_create(&tid[i],NULL,thread_runner,0);
     }
-    for(int i=0;i<3;++i){
+    for(int i=0;i<NUMBER_THREAD;++i){
         pthread_join(tid[i],NULL);
     }
     x.print();
