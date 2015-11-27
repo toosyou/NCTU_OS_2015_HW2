@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 
 #include <semaphore.h> 
 #include <pthread.h>
@@ -26,7 +27,7 @@ public:
         this->value++;
     }
     void print(void){
-        cout << value;
+        cout << value <<endl;
     }
     /* data */
 };
@@ -42,6 +43,8 @@ void* thread_runner(void*){
 }
 
 int main(void){
+    clock_t start_clock = clock();
+
     pthread_t tid[3];
     sem_init(&sem_counter,0,1);
     for(int i=0;i<3;++i){
@@ -52,5 +55,8 @@ int main(void){
     }
     x.print();
     sem_destroy(&sem_counter);
+
+    clock_t used_clock = clock() - start_clock;
+    cout << "time used: " << (float) used_clock / CLOCKS_PER_SEC << endl;
     return 0;
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 
 #include <pthread.h>
 
@@ -25,7 +26,7 @@ public:
         this->value++;
     }
     void print(void){
-        cout << value;
+        cout << value << endl;
     }
     /* data */
 };
@@ -41,6 +42,8 @@ void* thread_runner(void*){
 }
 
 int main(void){
+    clock_t start_clock = clock();
+
     pthread_t tid[3];
     pthread_spin_init(&counter_lock,0);
     for(int i=0;i<3;++i){
@@ -50,5 +53,8 @@ int main(void){
         pthread_join(tid[i],NULL);
     }
     x.print();
+
+    clock_t used_clock = clock() - start_clock;
+    cout << "time used: " << (float) used_clock / CLOCKS_PER_SEC << endl;
     return 0;
 }
